@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus — GISMA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --white: #f0ede6;
+  --mid: #9e9b94;
+  --dim: #4a4845;
+  --bg: #080807;
+  --bg2: #0f0f0e;
+  --line: rgba(255,255,255,0.07);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+#cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--white);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.15s, height 0.15s;
+}
+#cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+}
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  letter-spacing: 0.25em;
+  color: var(--white);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--mid);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+/* HERO — centered */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-presenting {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: up 0.9s ease 0.1s forwards;
+}
+
+.hero-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: clamp(88px, 18vw, 200px);
+  letter-spacing: 0.03em;
+  line-height: 0.88;
+  color: var(--white);
+  opacity: 0;
+  transform: translateY(24px);
+  animation: up 0.9s ease 0.3s forwards;
+}
+
+.hero-divider {
+  width: 1px;
+  height: 64px;
+  background: var(--line);
+  margin: 52px auto 0;
+  opacity: 0;
+  animation: fadeIn 1s ease 0.9s forwards;
+}
+
+.hero-sub {
+  margin-top: 40px;
+  max-width: 420px;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--mid);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: up 0.9s ease 0.7s forwards;
+}
+
+.hero-cta {
+  margin-top: 44px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: up 0.9s ease 0.85s forwards;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 13px 30px;
+  background: var(--white);
+  color: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+.btn-ghost {
+  display: inline-block;
+  padding: 13px 30px;
+  border: 1px solid var(--line);
+  color: var(--mid);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-2px); }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.4s forwards;
+}
+.scroll-hint span {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.scroll-dot {
+  width: 1px;
+  height: 36px;
+  background: linear-gradient(to bottom, var(--dim), transparent);
+}
+
+/* Section base */
+section {
+  padding: 100px 48px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.s-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 20px;
+}
+
+.s-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 60px);
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+
+.s-body {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--mid);
+  max-width: 520px;
+  margin: 0 auto 64px;
+  letter-spacing: 0.02em;
+}
+
+/* AIMS grid */
+.aims-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--line);
+  text-align: left;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.aim-item {
+  padding: 44px 40px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: background 0.3s;
+}
+.aim-item:nth-child(even) { border-right: none; }
+.aim-item:nth-last-child(-n+2) { border-bottom: none; }
+.aim-item:hover { background: rgba(255,255,255,0.015); }
+
+.aim-num {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--dim);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.aim-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+.aim-desc {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--mid);
+}
+
+/* EVENTS */
+.events-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+}
+
+.event-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  padding: 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-card::before {
+  content: 'HACKATHON';
+  position: absolute;
+  bottom: -20px; right: -8px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 72px;
+  color: rgba(255,255,255,0.025);
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.event-pill {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--bg);
+  background: var(--white);
+  padding: 5px 12px;
+  margin-bottom: 28px;
+}
+
+.event-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+
+.event-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--mid);
+  margin-bottom: 36px;
+}
+
+.meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.meta-key {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  min-width: 52px;
+  font-weight: 700;
+}
+.meta-val { color: var(--mid); font-size: 15px; }
+
+.workshops-col { display: flex; flex-direction: column; gap: 0; }
+.workshops-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.ws-item {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: padding-left 0.2s;
+}
+.ws-item:first-of-type { border-top: 1px solid var(--line); }
+.ws-item:hover { padding-left: 6px; }
+
+.ws-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--white);
+}
+.ws-tag {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 700;
+}
+
+/* TEAM */
+.team-intro { max-width: 400px; margin: 0 auto 16px; }
+
+/* Chair row */
+.chair-wrap {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 28px 36px;
+  text-align: left;
+  transition: background 0.3s;
+}
+.chair-wrap:hover { background: rgba(255,255,255,0.012); }
+
+.chair-photo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.chair-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.chair-photo-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg2);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: 0.05em;
+}
+
+.chair-info { flex: 1; }
+.chair-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.chair-role {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 700;
+}
+
+/* Team grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.team-card {
+  padding: 40px 36px;
+  border-right: 1px solid var(--line);
+  transition: background 0.3s;
+}
+.team-card:last-child { border-right: none; }
+.team-card:hover { background: rgba(255,255,255,0.012); }
+
+.team-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  margin-bottom: 24px;
+  display: block;
+  background: var(--bg2);
+  overflow: hidden;
+}
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder circle when no image uploaded */
+.photo-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+}
+
+.team-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.team-role {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.team-bio {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--mid);
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  min-height: 76px;
+}
+
+footer {
+  padding: 52px 48px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.25em;
+  color: var(--white);
+}
+.footer-copy {
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+}
+
+/* animations */
+@keyframes up {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+.reveal.on { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  nav { padding: 24px; }
+  .nav-links { display: none; }
+  #hero { padding: 0 24px; }
+  section { padding: 72px 24px; }
+  .aims-grid { grid-template-columns: 1fr; }
+  .aim-item { border-right: none; border-bottom: 1px solid var(--line); }
+  .aim-item:last-child { border-bottom: none; }
+  .events-wrap { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: 1fr; }
+  .team-card { border-right: none; border-bottom: 1px solid var(--line); }
+  .team-card:last-child { border-bottom: none; }
+  .chair-wrap { flex-direction: column; align-items: flex-start; }
+  footer { flex-direction: column; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a href="#hero" class="nav-logo">Nexus</a>
+  <ul class="nav-links">
+    <li><a href="#aims">About</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="border-top: none;">
+  <p class="hero-presenting">Presenting GISMA's first ever programming and tech society</p>
+  <h1 class="hero-name">Nexus</h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">
+    A place for students who want to build, learn, and figure things out together. Workshops, hackathons, projects — and people who actually care about what they're working on.
+  </p>
+  <div class="hero-cta">
+    <a href="#events" class="btn-primary">See What's On</a>
+    <a href="#team" class="btn-ghost">Meet the Team</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-dot"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- AIMS -->
+<section id="aims">
+  <p class="s-label reveal">What we're about</p>
+  <h2 class="s-title reveal">Built for people<br>who build things.</h2>
+  <p class="s-body reveal">Nexus exists because the classroom only goes so far. We fill the gap with real projects, real events, and people who give a damn about what they're making.</p>
+  <div class="aims-grid">
+    <div class="aim-item reveal">
+      <p class="aim-num">01</p>
+      <h3 class="aim-title">Connect the right people</h3>
+      <p class="aim-desc">Find collaborators, not just classmates. Whether you're building an app, learning a new stack, or just want someone to talk tech with — you'll find them here.</p>
+    </div>
+    <div class="aim-item reveal">
+      <p class="aim-num">02</p>
+      <h3 class="aim-title">Build things that ship</h3>
+      <p class="aim-desc">From hackathons to long-term projects, we create the conditions for real work to happen. Ideas that start here actually go somewhere.</p>
+    </div>
+    <div class="aim-item reveal">
+      <p class="aim-num">03</p>
+      <h3 class="aim-title">Learn by doing</h3>
+      <p class="aim-desc">Hands-on workshops across web dev, cybersecurity, game development and more. No fluff, no slides-only sessions — just skill-building that sticks.</p>
+    </div>
+    <div class="aim-item reveal">
+      <p class="aim-num">04</p>
+      <h3 class="aim-title">Stay sharp</h3>
+      <p class="aim-desc">Tech moves fast. We talk about what's happening in the industry, how to plan your learning, and where things are going. Regular sessions, no gatekeeping.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <p class="s-label reveal">Events</p>
+  <h2 class="s-title reveal">What's happening.</h2>
+  <p class="s-body reveal">Our first hackathon kicks things off. More events are in the works such as workshops, networking sessions, and things we haven't announced yet.</p>
+  <div class="events-wrap">
+    <div class="event-card reveal">
+      <span class="event-pill">Flagship Event</span>
+      <h3 class="event-title">The Odyssey</h3>
+      <p class="event-sub">Our first hackathon. One day. Build something real.</p>
+      <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">11th June 2026</span></div>
+      <div class="meta-row"><span class="meta-key">Time</span><span class="meta-val">1:00 PM — 7:00 PM</span></div>
+      <div class="meta-row"><span class="meta-key">Venue</span><span class="meta-val">GISMA Campus Potsdam, Room 12</span></div>
+    </div>
+    <div class="workshops-col reveal">
+      <p class="workshops-label">Upcoming Workshops</p>
+      <div class="ws-item">
+        <span class="ws-name">Game Development</span>
+        <span class="ws-tag">Soon</span>
+      </div>
+      <div class="ws-item">
+        <span class="ws-name">Cybersecurity</span>
+        <span class="ws-tag">Soon</span>
+      </div>
+      <div class="ws-item">
+        <span class="ws-name">Web Development</span>
+        <span class="ws-tag">Soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <p class="s-label reveal">The Team</p>
+  <h2 class="s-title reveal">The people behind it.</h2>
+
+  <!-- Chair -->
+  <div class="chair-wrap reveal">
+    <div class="chair-photo-placeholder">MH</div>
+    <div class="chair-info">
+      <p class="chair-name">Prof. Dr. Mazhar Hameed</p>
+      <p class="chair-role">Chair &nbsp;·&nbsp; Faculty Advisor</p>
+    </div>
+  </div>
+
+  <!-- Co-founders — Pravardh first -->
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <!--
+        TO ADD YOUR PHOTO:
+        1. Put your image file (e.g. pravardh.jpg) in the same folder as index.html
+        2. Replace the .photo-placeholder div below with:
+           <div class="team-photo"><img src="pravardh.jpg" alt="Pravardh Phaniraj"></div>
+      -->
+      <div class="photo-placeholder">PP</div>
+      <h3 class="team-name">Pravardh Phaniraj</h3>
+      <p class="team-role">Co-Founder</p>
+      <p class="team-bio">our intro will go here....</p>
+    </div>
+    <div class="team-card reveal">
+      <div class="photo-placeholder">AY</div>
+      <h3 class="team-name">Alan Yuldashev</h3>
+      <p class="team-role">Co-Founder</p>
+      <p class="team-bio">our intro will go here...</p>
+    </div>
+    <div class="team-card reveal">
+      <div class="photo-placeholder">MK</div>
+      <h3 class="team-name">Munish Khan</h3>
+      <p class="team-role">Co-Founder</p>
+      <p class="team-bio">our intro will go here...</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-logo">Nexus</p>
+  <p class="footer-copy">GISMA University of Applied Sciences &nbsp;·&nbsp; 2026</p>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+(function loop() {
+  rx += (mx - rx) * 0.1;
+  ry += (my - ry) * 0.1;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '4px'; cursor.style.height = '4px';
+    ring.style.width = '48px'; ring.style.height = '48px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '8px'; cursor.style.height = '8px';
+    ring.style.width = '32px'; ring.style.height = '32px';
+  });
+});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('on'), i * 70);
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
