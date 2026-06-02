@@ -92,7 +92,7 @@ nav {
 }
 .nav-links a:hover { color: var(--white); }
 
-/* HERO — centered */
+/* HERO */
 #hero {
   min-height: 100vh;
   display: flex;
@@ -216,6 +216,116 @@ nav {
   background: linear-gradient(to bottom, var(--dim), transparent);
 }
 
+/* COUNTDOWN SECTION */
+#countdown-section {
+  padding: 80px 48px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#countdown-section::before {
+  content: 'THE ODYSSEY';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4rem, 10vw, 9rem);
+  color: rgba(255,255,255,0.02);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.countdown-eyebrow {
+  font-size: 0.625rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+
+.countdown-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 52px;
+}
+
+.countdown-title span {
+  color: var(--mid);
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0;
+  max-width: 700px;
+  margin: 0 auto 52px;
+}
+
+.countdown-unit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  border: 1px solid var(--line);
+  border-right: none;
+  position: relative;
+  transition: background 0.3s;
+}
+.countdown-unit:last-child { border-right: 1px solid var(--line); }
+.countdown-unit:hover { background: rgba(255,255,255,0.015); }
+
+.countdown-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  min-width: 2ch;
+  text-align: center;
+  transition: opacity 0.15s;
+}
+
+.countdown-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+.countdown-separator {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--dim);
+  padding: 32px 4px 0;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.countdown-cta {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.countdown-ended {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--mid);
+  letter-spacing: 0.1em;
+}
+
 /* Section base */
 section {
   padding: 100px 48px;
@@ -310,11 +420,10 @@ section {
 }
 
 .event-card::before {
-  content: 'HACK AWAY';
+  content: 'ODYSSEY';
   position: absolute;
   bottom: -20px; right: -8px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 4.5rem;
   color: rgba(255,255,255,0.025);
   letter-spacing: -0.02em;
@@ -370,6 +479,44 @@ section {
 }
 .meta-val { color: var(--mid); font-size: 0.9375rem; }
 
+.event-actions {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.event-btn-primary {
+  display: inline-block;
+  padding: 11px 24px;
+  background: var(--white);
+  color: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.event-btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.event-btn-ghost {
+  display: inline-block;
+  padding: 11px 24px;
+  border: 1px solid var(--line);
+  color: var(--mid);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.event-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-1px); }
+
 .workshops-col { display: flex; flex-direction: column; gap: 0; }
 .workshops-label {
   font-size: 0.625rem;
@@ -408,7 +555,6 @@ section {
 /* TEAM */
 .team-intro { max-width: 400px; margin: 0 auto 16px; }
 
-/* Chair row */
 .chair-wrap {
   max-width: 900px;
   margin: 0 auto 24px;
@@ -430,31 +576,13 @@ section {
   border: 1px solid var(--line);
   flex-shrink: 0;
   background: var(--bg2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
 }
 .chair-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.chair-photo-placeholder {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: var(--bg2);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--dim);
-  letter-spacing: 0.05em;
+  display: block;
 }
 
 .chair-info { flex: 1; }
@@ -473,7 +601,6 @@ section {
   font-weight: 700;
 }
 
-/* Team grid */
 .team-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -495,20 +622,20 @@ section {
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  object-fit: cover;
   border: 1px solid var(--line);
   margin-bottom: 24px;
   display: block;
   background: var(--bg2);
   overflow: hidden;
+  flex-shrink: 0;
 }
 .team-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* Placeholder circle when no image uploaded */
 .photo-placeholder {
   width: 72px;
   height: 72px;
@@ -573,7 +700,6 @@ footer {
   letter-spacing: 0.08em;
 }
 
-/* animations */
 @keyframes up {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -593,6 +719,9 @@ footer {
   .nav-links { display: none; }
   #hero { padding: 0 24px; }
   section { padding: 72px 24px; }
+  #countdown-section { padding: 64px 24px; }
+  .countdown-grid { gap: 0; }
+  .countdown-separator { display: none; }
   .aims-grid { grid-template-columns: 1fr; }
   .aim-item { border-right: none; border-bottom: 1px solid var(--line); }
   .aim-item:last-child { border-bottom: none; }
@@ -602,6 +731,7 @@ footer {
   .team-card:last-child { border-bottom: none; }
   .chair-wrap { flex-direction: column; align-items: flex-start; }
   footer { flex-direction: column; gap: 12px; }
+  .countdown-cta { flex-direction: column; align-items: center; }
 }
 </style>
 </head>
@@ -614,6 +744,7 @@ footer {
   <a href="#hero" class="nav-logo">Nexus</a>
   <ul class="nav-links">
     <li><a href="#aims">About</a></li>
+    <li><a href="#countdown-section">Countdown</a></li>
     <li><a href="#events">Events</a></li>
     <li><a href="#team">Team</a></li>
   </ul>
@@ -636,6 +767,40 @@ footer {
     <span>Scroll</span>
   </div>
 </section>
+
+<!-- COUNTDOWN -->
+<div id="countdown-section">
+  <p class="countdown-eyebrow reveal">First ever Nexus event</p>
+  <h2 class="countdown-title reveal">The Odyssey <span>starts in</span></h2>
+
+  <div class="countdown-grid reveal" id="countdown-grid">
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-days">00</span>
+      <span class="countdown-label">Days</span>
+    </div>
+    <div class="countdown-separator">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-hours">00</span>
+      <span class="countdown-label">Hours</span>
+    </div>
+    <div class="countdown-separator">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-mins">00</span>
+      <span class="countdown-label">Minutes</span>
+    </div>
+    <div class="countdown-separator">:</div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-secs">00</span>
+      <span class="countdown-label">Seconds</span>
+    </div>
+  </div>
+
+  <div class="countdown-cta reveal">
+    <a href="https://forms.cloud.microsoft/e/9zLCBAkGWH" target="_blank" class="btn-primary">Register Now</a>
+    <a href="https://canva.link/w78yfl09txdcxci" target="_blank" class="btn-ghost">Hackathon Details</a>
+    <a href="https://canva.link/cu2e1ztv8i3qen9" target="_blank" class="btn-ghost">FAQs</a>
+  </div>
+</div>
 
 <!-- AIMS -->
 <section id="aims">
@@ -679,6 +844,11 @@ footer {
       <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">11th June 2026</span></div>
       <div class="meta-row"><span class="meta-key">Time</span><span class="meta-val">1:00 PM — 7:00 PM</span></div>
       <div class="meta-row"><span class="meta-key">Venue</span><span class="meta-val">GISMA Potsdam Campus, Room 12</span></div>
+      <div class="event-actions">
+        <a href="https://forms.cloud.microsoft/e/9zLCBAkGWH" target="_blank" class="event-btn-primary">Register</a>
+        <a href="https://canva.link/w78yfl09txdcxci" target="_blank" class="event-btn-ghost">Details</a>
+        <a href="https://canva.link/cu2e1ztv8i3qen9" target="_blank" class="event-btn-ghost">FAQs</a>
+      </div>
     </div>
     <div class="workshops-col reveal">
       <p class="workshops-label">Upcoming Workshops</p>
@@ -702,11 +872,10 @@ footer {
 <section id="team">
   <p class="s-label reveal">The Team</p>
   <h2 class="s-title reveal">The people behind it.</h2>
-  <p class="s-body team-intro reveal">Three students and one professor who are super passionate about tech! </p>
+  <p class="s-body team-intro reveal">Three students and one professor who are super passionate about tech!</p>
 
-  <!-- Chair -->
   <div class="chair-wrap reveal">
-<div class="team-photo"><img src="mazhar.jpeg" alt="Mazhar Hameed"></div>
+    <div class="chair-photo"><img src="mazhar.jpeg" alt="Mazhar Hameed"></div>
     <div class="chair-info">
       <p class="chair-name">Prof. Dr. Mazhar Hameed</p>
       <p class="chair-role">Chair &nbsp;·&nbsp; Faculty Advisor</p>
@@ -715,31 +884,22 @@ footer {
 
   <div class="team-grid">
     <div class="team-card reveal">
-<div class="team-photo"><img src="prav.jpg" alt="Pravardh Phaniraj"></div>
+      <div class="team-photo"><img src="prav.jpg" alt="Pravardh Phaniraj"></div>
       <h3 class="team-name">Pravardh Phaniraj</h3>
       <p class="team-role">Co-Chair</p>
-      <p class="team-bio">Hey! I've been super interested in IT ever since I was 12. I started off with Scratch, 
-        got really into video game development, and then slowly pivoted into Cybersecurity. I love solving problems
-        and learning about tech. I have around 5 years of freelancing experience in video game development, 
-        and I've been working as a cybersecurity werkstudent at Sopra Steria for the past year :)</p>
+      <p class="team-bio">Hey! I've been super interested in IT ever since I was 12. I started off with Scratch, got really into video game development, and then slowly pivoted into Cybersecurity. I love solving problems and learning about tech. I have around 5 years of freelancing experience in video game development, and I've been working as a cybersecurity werkstudent at Sopra Steria for the past year :)</p>
     </div>
     <div class="team-card reveal">
-<div class="team-photo"><img src="alan.jpeg" alt="Alan Yuldashev"></div>
+      <div class="team-photo"><img src="alan.jpeg" alt="Alan Yuldashev"></div>
       <h3 class="team-name">Alan Yuldashev</h3>
       <p class="team-role">Co-Chair</p>
-      <p class="team-bio">I’m a software engineer who enjoys building cool stuff.
-      I’m into web development, mostly backend, love TUIs. I
-      enjoy working with passionate, smart people. I’ve met a
-      lot of great people in Berlin’s tech community, and I
-      believe there’s so much more to discover. Outside of
-      work, I enjoy sports and a bit of martial arts.</p>
+      <p class="team-bio">I'm a software engineer who enjoys building cool stuff. I'm into web development, mostly backend, love TUIs. I enjoy working with passionate, smart people. I've met a lot of great people in Berlin's tech community, and I believe there's so much more to discover. Outside of work, I enjoy sports and a bit of martial arts.</p>
     </div>
     <div class="team-card reveal">
-<div class="team-photo"><img src="munish.jpeg" alt="Munish Khan"></div>
+      <div class="team-photo"><img src="munish.jpeg" alt="Munish Khan"></div>
       <h3 class="team-name">Munish Khan</h3>
       <p class="team-role">Co-Chair</p>
-      <p class="team-bio">I’m Munish, a cybersecurity professional currently studying Data Science. I’m love solving real-world problems through technology and strongly believe that computers can help address many of the world’s fundamental challenges.
-For me, technology is more than just a field of study or work. It is a tool to create meaningful impact and push the boundaries of what humanity can achieve</p>
+      <p class="team-bio">I'm Munish, a cybersecurity professional currently studying Data Science. I love solving real-world problems through technology and strongly believe that computers can help address many of the world's fundamental challenges. For me, technology is more than just a field of study — it's a tool to create meaningful impact.</p>
     </div>
   </div>
 </section>
@@ -750,6 +910,7 @@ For me, technology is more than just a field of study or work. It is a tool to c
 </footer>
 
 <script>
+// Custom cursor
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -779,6 +940,7 @@ document.querySelectorAll('a, button').forEach(el => {
   });
 });
 
+// Scroll reveal
 const obs = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) setTimeout(() => e.target.classList.add('on'), i * 70);
@@ -786,6 +948,35 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Countdown — target: June 11 2026, 13:00 CET (UTC+2 in summer)
+const target = new Date('2026-06-11T13:00:00+02:00');
+
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function tick() {
+  const now = new Date();
+  const diff = target - now;
+
+  if (diff <= 0) {
+    document.getElementById('countdown-grid').innerHTML =
+      '<p class="countdown-ended">The Odyssey is live. Good luck.</p>';
+    return;
+  }
+
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000) / 60000);
+  const secs  = Math.floor((diff % 60000) / 1000);
+
+  document.getElementById('cd-days').textContent  = pad(days);
+  document.getElementById('cd-hours').textContent = pad(hours);
+  document.getElementById('cd-mins').textContent  = pad(mins);
+  document.getElementById('cd-secs').textContent  = pad(secs);
+}
+
+tick();
+setInterval(tick, 1000);
 </script>
 </body>
 </html>
