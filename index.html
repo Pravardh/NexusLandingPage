@@ -10,87 +10,128 @@
 <link rel="shortcut icon" href="favicons/favicon.ico">
 <link rel="manifest" href="favicons/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('nexus-theme');
+      if(!t){ t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e){ document.documentElement.setAttribute('data-theme','light'); }
+  })();
+</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --white: #f0ede6;
-  --mid: #9e9b94;
-  --dim: #4a4845;
-  --bg: #080807;
-  --bg2: #0f0f0e;
-  --line: rgba(255,255,255,0.07);
+  --paper: #f1f1ee;
+  --panel: #fbfbf9;
+  --ink: #141417;
+  --muted: #5c5c63;
+  --faint: #9a9aa1;
+  --line: rgba(20,20,23,0.13);
+  --line-soft: rgba(20,20,23,0.07);
+  --accent: #3a34e0;
+  --accent-ink: #ffffff;
+  --grain: 0.04;
+  --r: 16px;
+}
+[data-theme="dark"] {
+  --paper: #0d0d11;
+  --panel: #16161c;
+  --ink: #f1f1ec;
+  --muted: #a2a2aa;
+  --faint: #676770;
+  --line: rgba(255,255,255,0.14);
+  --line-soft: rgba(255,255,255,0.06);
+  --accent: #7d78ff;
+  --accent-ink: #0d0d11;
+  --grain: 0.06;
 }
 
-html { scroll-behavior: smooth; font-size: 120%; }
-
+html { scroll-behavior: smooth; font-size: 106%; }
 body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  cursor: none;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-weight: 400;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
+a { color: inherit; }
 
-@media (hover: none), (pointer: coarse) {
-  body { cursor: auto; }
-  #cursor, #cursor-ring { display: none !important; }
-}
-
-#cursor {
-  position: fixed;
-  width: 8px; height: 8px;
-  background: var(--white);
-  border-radius: 50%;
+.grain {
+  position: fixed; inset: 0;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: width 0.15s, height 0.15s;
-}
-#cursor-ring {
-  position: fixed;
-  width: 32px; height: 32px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 100;
-  padding: 32px 48px;
+  padding: 20px 44px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
 }
-
+nav.scrolled {
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-soft);
+}
 .nav-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  font-size: 1.125rem;
-  letter-spacing: 0.25em;
-  color: var(--white);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
   text-decoration: none;
-  text-transform: uppercase;
 }
-
-.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-logo .dot { color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 26px; }
+.nav-links { display: flex; gap: 26px; list-style: none; align-items: center; }
 .nav-links a {
-  color: var(--mid);
+  color: var(--muted);
   text-decoration: none;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-family: 'DM Sans', sans-serif;
   transition: color 0.2s;
 }
-.nav-links a:hover { color: var(--white); }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  color: var(--ink) !important;
+  border: 1px solid var(--line);
+  padding: 9px 17px;
+  border-radius: 100px;
+  transition: border-color 0.2s, color 0.2s !important;
+}
+.nav-cta:hover { border-color: var(--accent); color: var(--accent) !important; }
+
+.theme-toggle {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle .i-moon { display: block; }
+.theme-toggle .i-sun { display: none; }
+[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+[data-theme="dark"] .theme-toggle .i-sun { display: block; }
 
 /* HERO */
 #hero {
@@ -100,744 +141,443 @@ nav {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 40px;
+  padding: 120px 40px 90px;
   position: relative;
-  overflow: hidden;
 }
-
+.hero-locator {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 38px;
+  opacity: 0;
+  animation: up 0.9s ease 0.05s forwards;
+}
 .hero-presenting {
-  font-family: 'DM Sans', sans-serif;
   font-style: italic;
-  font-weight: 300;
-  font-size: 0.875rem;
-  letter-spacing: 0.08em;
-  color: var(--mid);
-  margin-bottom: 28px;
-  opacity: 0;
-  transform: translateY(16px);
-  animation: up 0.9s ease 0.1s forwards;
-}
-
-.hero-name {
-  font-family: 'Bebas Neue', sans-serif;
   font-weight: 400;
-  font-size: clamp(5.5rem, 18vw, 12.5rem);
-  letter-spacing: 0.03em;
-  line-height: 0.88;
-  color: var(--white);
-  opacity: 0;
-  transform: translateY(24px);
+  font-size: 0.98rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+  opacity: 0; transform: translateY(16px);
+  animation: up 0.9s ease 0.15s forwards;
+}
+.hero-name {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 800;
+  font-size: clamp(5rem, 19vw, 15rem);
+  letter-spacing: -0.04em;
+  line-height: 0.84;
+  color: var(--ink);
+  opacity: 0; transform: translateY(24px);
   animation: up 0.9s ease 0.3s forwards;
 }
-
+.hero-name .dot { color: var(--accent); }
 .hero-divider {
-  width: 1px;
-  height: 64px;
-  background: var(--line);
-  margin: 52px auto 0;
+  width: 44px; height: 3px;
+  background: var(--accent);
+  border-radius: 3px;
+  margin: 40px auto 0;
   opacity: 0;
   animation: fadeIn 1s ease 0.9s forwards;
 }
-
 .hero-sub {
-  margin-top: 40px;
-  max-width: 420px;
-  font-size: 1rem;
-  line-height: 1.85;
-  color: var(--mid);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  opacity: 0;
-  transform: translateY(14px);
+  margin-top: 34px;
+  max-width: 452px;
+  font-size: 1.04rem;
+  line-height: 1.75;
+  color: var(--muted);
+  opacity: 0; transform: translateY(14px);
   animation: up 0.9s ease 0.7s forwards;
 }
-
 .hero-cta {
-  margin-top: 44px;
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(14px);
+  margin-top: 40px;
+  display: flex; gap: 12px;
+  align-items: center; justify-content: center; flex-wrap: wrap;
+  opacity: 0; transform: translateY(14px);
   animation: up 0.9s ease 0.85s forwards;
 }
-
-.btn-primary {
+.btn-primary, .btn-ghost {
   display: inline-block;
-  padding: 13px 30px;
-  background: var(--white);
-  color: var(--bg);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  padding: 15px 32px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: opacity 0.2s, transform 0.2s;
+  border-radius: 100px;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
 }
-.btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
-
-.btn-ghost {
-  display: inline-block;
-  padding: 13px 30px;
-  border: 1px solid var(--line);
-  color: var(--mid);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: border-color 0.2s, color 0.2s, transform 0.2s;
-}
-.btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-2px); }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { transform: translateY(-2px); background: var(--accent); color: var(--accent-ink); }
+.btn-ghost { border: 1px solid var(--line); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
 .scroll-hint {
-  position: absolute;
-  bottom: 36px;
-  left: 50%;
+  position: absolute; bottom: 32px; left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  animation: fadeIn 1s ease 1.4s forwards;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeIn 1s ease 1.4s forwards;
 }
 .scroll-hint span {
-  font-size: 0.5625rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--dim);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint);
 }
-.scroll-dot {
-  width: 1px;
-  height: 36px;
-  background: linear-gradient(to bottom, var(--dim), transparent);
-}
+.scroll-dot { width: 1px; height: 32px; background: linear-gradient(to bottom, var(--line), transparent); }
 
-/* COUNTDOWN SECTION */
-#countdown-section {
-  padding: 80px 48px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-  position: relative;
+/* MARQUEE */
+.marquee {
   overflow: hidden;
-}
-
-#countdown-section::before {
-  content: 'THE ODYSSEY';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(4rem, 10vw, 9rem);
-  color: rgba(255,255,255,0.02);
-  letter-spacing: 0.1em;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  padding: 20px 0;
   white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
+  background: var(--panel);
+  transition: background-color 0.4s ease;
 }
-
-.countdown-eyebrow {
-  font-size: 0.625rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 12px;
-}
-
-.countdown-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  letter-spacing: 0.1em;
-  color: var(--white);
-  margin-bottom: 52px;
-}
-
-.countdown-title span {
-  color: var(--mid);
-}
-
-.countdown-grid {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0;
-  max-width: 700px;
-  margin: 0 auto 52px;
-}
-
-.countdown-unit {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 16px;
-  border: 1px solid var(--line);
-  border-right: none;
-  position: relative;
-  transition: background 0.3s;
-}
-.countdown-unit:last-child { border-right: 1px solid var(--line); }
-.countdown-unit:hover { background: rgba(255,255,255,0.015); }
-
-.countdown-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  line-height: 1;
-  color: var(--white);
-  letter-spacing: 0.02em;
-  min-width: 2ch;
-  text-align: center;
-  transition: opacity 0.15s;
-}
-
-.countdown-label {
-  font-size: 0.5rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-top: 12px;
+.marquee-track { display: inline-block; animation: scroll 30s linear infinite; }
+.marquee-track span {
+  font-family: 'Bricolage Grotesque', sans-serif;
   font-weight: 700;
-}
-
-.countdown-separator {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  color: var(--dim);
-  padding: 32px 4px 0;
-  line-height: 1.6;
-  flex-shrink: 0;
-}
-
-.countdown-cta {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.countdown-ended {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  color: var(--mid);
-  letter-spacing: 0.1em;
-}
-
-/* Section base */
-section {
-  padding: 100px 48px;
-  border-top: 1px solid var(--line);
-  text-align: center;
-}
-
-.s-label {
-  font-size: 0.625rem;
-  letter-spacing: 0.3em;
+  font-size: 1.55rem;
   text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  padding: 0 0.35em;
 }
+.marquee-track .sep { color: var(--accent); padding: 0 0.15em; }
 
-.s-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  color: var(--white);
-  line-height: 1.05;
-  margin-bottom: 16px;
-  letter-spacing: 0.04em;
-}
-
-.s-body {
-  font-size: 1rem;
-  line-height: 1.85;
-  color: var(--mid);
-  max-width: 520px;
-  margin: 0 auto 64px;
-  letter-spacing: 0.02em;
-}
-
-/* AIMS grid */
-.aims-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* NEXT UP */
+#next-up { padding: 100px 44px; }
+.spotlight {
+  max-width: 900px; margin: 0 auto;
+  background: var(--panel);
   border: 1px solid var(--line);
-  text-align: left;
-  max-width: 900px;
-  margin: 0 auto;
+  border-radius: var(--r);
+  padding: 62px 58px;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 22px;
+}
+.eyebrow::before { content: ''; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+.spotlight-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 6.5vw, 4.4rem);
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  color: var(--ink);
+  margin-bottom: 26px;
+}
+.status-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line); border-radius: 100px;
+  padding: 8px 15px; margin-bottom: 28px;
+}
+.status-chip b { color: var(--ink); font-weight: 700; }
+.spotlight-body { font-size: 1.04rem; line-height: 1.8; color: var(--muted); max-width: 540px; }
+.game-strip { margin-top: 42px; padding-top: 26px; border-top: 1px solid var(--line-soft); }
+#jam-game { display: block; width: 100%; height: 88px; cursor: pointer; touch-action: manipulation; }
+.game-hint { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-top: 12px; }
+.game-hint b { color: var(--accent); font-weight: 700; }
 
+/* SECTION */
+section.block { padding: 112px 44px; border-top: 1px solid var(--line-soft); text-align: center; }
+.s-label {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 18px;
+}
+.s-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink); margin-bottom: 18px;
+}
+.s-body { font-size: 1.04rem; line-height: 1.8; color: var(--muted); max-width: 552px; margin: 0 auto 62px; }
+
+/* AIMS */
+.aims-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
+  text-align: left; max-width: 940px; margin: 0 auto; background: var(--panel);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
 .aim-item {
-  padding: 44px 40px;
-  border-right: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  padding: 48px 44px;
+  border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
   transition: background 0.3s;
 }
 .aim-item:nth-child(even) { border-right: none; }
 .aim-item:nth-last-child(-n+2) { border-bottom: none; }
-.aim-item:hover { background: rgba(255,255,255,0.015); }
-
-.aim-num {
-  font-size: 0.625rem;
-  letter-spacing: 0.25em;
-  color: var(--dim);
-  margin-bottom: 20px;
-  font-weight: 700;
-}
+.aim-item:hover { background: color-mix(in srgb, var(--accent) 5%, var(--panel)); }
+.aim-mark { width: 30px; height: 3px; background: var(--accent); border-radius: 3px; margin-bottom: 22px; }
 .aim-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: var(--white);
-  margin-bottom: 12px;
-  line-height: 1.3;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 600; font-size: 1.42rem; letter-spacing: -0.02em;
+  color: var(--ink); margin-bottom: 12px; line-height: 1.2;
 }
-.aim-desc {
-  font-size: 0.9375rem;
-  line-height: 1.85;
-  color: var(--mid);
-}
+.aim-desc { font-size: 0.96rem; line-height: 1.75; color: var(--muted); }
 
 /* EVENTS */
 .events-wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  text-align: left;
+  max-width: 940px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; text-align: left;
 }
-
-.event-card {
-  background: var(--bg2);
-  border: 1px solid var(--line);
-  padding: 44px;
-  position: relative;
-  overflow: hidden;
+.recap-card, .horizon {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 46px;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
-
-.event-card::before {
-  content: 'ODYSSEY';
-  position: absolute;
-  bottom: -20px; right: -8px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 4.5rem;
-  color: rgba(255,255,255,0.025);
-  letter-spacing: -0.02em;
-  pointer-events: none;
-  line-height: 1;
-}
-
+.recap-card { display: flex; flex-direction: column; }
 .event-pill {
-  display: inline-block;
-  font-size: 0.5625rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--bg);
-  background: var(--white);
-  padding: 5px 12px;
-  margin-bottom: 28px;
+  align-self: flex-start;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); border: 1px solid var(--line); border-radius: 100px;
+  padding: 6px 12px; margin-bottom: 26px;
 }
-
-.event-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 3.25rem;
-  font-weight: 400;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 8px;
-  letter-spacing: 0.04em;
+.recap-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700; font-size: 2.9rem; letter-spacing: -0.03em;
+  color: var(--ink); line-height: 1; margin-bottom: 12px;
 }
-
-.event-sub {
-  font-family: 'DM Sans', sans-serif;
-  font-style: italic;
-  font-weight: 300;
-  font-size: 1rem;
-  color: var(--mid);
-  margin-bottom: 36px;
+.recap-sub { font-size: 0.98rem; color: var(--muted); line-height: 1.7; margin-bottom: 30px; }
+.recap-stats { display: flex; gap: 30px; margin-bottom: 34px; }
+.recap-stat .n {
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;
+  font-size: 1.9rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
 }
-
-.meta-row {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 10px;
-  font-size: 0.8125rem;
+.recap-stat .l {
+  font-family: 'Space Mono', monospace; font-size: 0.56rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); margin-top: 7px;
 }
-.meta-key {
-  font-size: 0.5625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
-  min-width: 52px;
-  font-weight: 700;
+.recap-link {
+  margin-top: auto; align-self: flex-start;
+  font-size: 0.76rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+  border-bottom: 2px solid var(--accent); padding-bottom: 4px;
+  transition: color 0.2s;
 }
-.meta-val { color: var(--mid); font-size: 0.9375rem; }
-
-.event-actions {
-  margin-top: 32px;
-  padding-top: 28px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.recap-link:hover { color: var(--accent); }
+.horizon-label {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--faint); margin-bottom: 8px;
 }
-
-.event-btn-primary {
-  display: inline-block;
-  padding: 11px 24px;
-  background: var(--white);
-  color: var(--bg);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: opacity 0.2s, transform 0.2s;
+.hz-item {
+  padding: 20px 0; border-bottom: 1px solid var(--line-soft);
+  display: flex; justify-content: space-between; align-items: center;
 }
-.event-btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
-
-.event-btn-ghost {
-  display: inline-block;
-  padding: 11px 24px;
-  border: 1px solid var(--line);
-  color: var(--mid);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.625rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+.hz-item:last-child { border-bottom: none; }
+.hz-name { font-size: 1.06rem; font-weight: 500; color: var(--ink); }
+.hz-tag {
+  font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
 }
-.event-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-1px); }
-
-.workshops-col { display: flex; flex-direction: column; gap: 0; }
-.workshops-label {
-  font-size: 0.625rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--dim);
-  margin-bottom: 16px;
-  font-weight: 700;
-}
-
-.ws-item {
-  padding: 22px 0;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: padding-left 0.2s;
-}
-.ws-item:first-of-type { border-top: 1px solid var(--line); }
-.ws-item:hover { padding-left: 6px; }
-
-.ws-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 400;
-  color: var(--white);
-}
-.ws-tag {
-  font-size: 0.5625rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
-  font-weight: 700;
-}
+.hz-tag.next { color: var(--accent); }
 
 /* TEAM */
-.team-intro { max-width: 400px; margin: 0 auto 16px; }
-
+.team-intro { max-width: 430px; margin: 0 auto 40px; }
 .chair-wrap {
-  max-width: 900px;
-  margin: 0 auto 24px;
+  max-width: 940px; margin: 0 auto 18px;
+  border: 1px solid var(--line); border-radius: var(--r); background: var(--panel);
+  display: flex; align-items: center; gap: 24px; padding: 28px 36px; text-align: left;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+.avatar {
+  width: 62px; height: 62px; border-radius: 50%; object-fit: cover;
+  border: 1px solid var(--line); flex-shrink: 0; background: var(--paper);
+}
+.avatar-fallback {
+  width: 62px; height: 62px; border-radius: 50%;
   border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  padding: 28px 36px;
-  text-align: left;
-  transition: background 0.3s;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;
+  font-size: 1.4rem; flex-shrink: 0;
 }
-.chair-wrap:hover { background: rgba(255,255,255,0.012); }
-
-.chair-photo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid var(--line);
-  flex-shrink: 0;
-  background: var(--bg2);
-  overflow: hidden;
-}
-.chair-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 .chair-info { flex: 1; }
 .chair-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 400;
-  color: var(--white);
-  margin-bottom: 4px;
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600;
+  font-size: 1.2rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 4px;
 }
-.chair-role {
-  font-size: 0.625rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--dim);
-  font-weight: 700;
-}
-
+.chair-role { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--line);
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: left;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
+  max-width: 940px; margin: 0 auto; text-align: left; background: var(--panel);
+  transition: background-color 0.4s ease, border-color 0.4s ease;
 }
-
 .team-card {
-  padding: 40px 36px;
-  border-right: 1px solid var(--line);
-  transition: background 0.3s;
+  padding: 42px 36px; border-right: 1px solid var(--line-soft);
+  transition: background 0.3s; display: flex; flex-direction: column;
 }
 .team-card:last-child { border-right: none; }
-.team-card:hover { background: rgba(255,255,255,0.012); }
-
-.team-photo {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  margin-bottom: 24px;
-  display: block;
-  background: var(--bg2);
-  overflow: hidden;
-  flex-shrink: 0;
+.team-card:hover { background: color-mix(in srgb, var(--accent) 5%, var(--panel)); }
+.team-card .avatar, .team-card .avatar-fallback { width: 70px; height: 70px; margin-bottom: 24px; }
+.team-card .avatar-fallback { font-size: 1.6rem; }
+.team-name {
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600;
+  font-size: 1.2rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 4px;
 }
-.team-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.photo-placeholder {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--dim);
-  letter-spacing: 0.08em;
-}
-
+.team-role { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-bottom: 18px; }
 .linkedin-btn {
-  display: inline-block;
-  font-size: 0.5625rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: var(--dim);
-  text-decoration: none;
-  border: 1px solid var(--line);
-  padding: 6px 14px;
-  margin-bottom: 18px;
+  align-self: flex-start; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  border: 1px solid var(--line); border-radius: 100px; padding: 7px 14px; margin-bottom: 20px;
   transition: color 0.2s, border-color 0.2s;
 }
-.linkedin-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
-
-.team-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.0625rem;
-  font-weight: 400;
-  color: var(--white);
-  margin-bottom: 4px;
-}
-.team-role {
-  font-size: 0.5625rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--dim);
-  font-weight: 700;
-  margin-bottom: 20px;
-}
+.linkedin-btn:hover { color: var(--accent); border-color: var(--accent); }
 .team-bio {
-  font-size: 0.875rem;
-  line-height: 1.85;
-  color: var(--mid);
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
-  font-family: 'DM Sans', sans-serif;
-  font-style: italic;
-  font-weight: 300;
-  min-height: 76px;
+  font-size: 0.92rem; line-height: 1.8; color: var(--muted);
+  border-top: 1px solid var(--line-soft); padding-top: 18px; font-style: italic; font-weight: 400;
 }
 
+/* FOOTER */
 footer {
-  padding: 52px 48px;
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 54px 44px; border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
 }
 .footer-logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-weight: 400;
-  font-size: 1.375rem;
-  letter-spacing: 0.25em;
-  color: var(--white);
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: 1.5rem; letter-spacing: -0.02em; color: var(--ink);
 }
-.footer-copy {
-  font-size: 0.6875rem;
-  color: var(--dim);
-  letter-spacing: 0.08em;
+.footer-logo .dot { color: var(--accent); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color 0.2s;
 }
+.footer-links a:hover { color: var(--ink); }
+.footer-copy { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--faint); }
 
-@keyframes up {
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+@keyframes up { to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes scroll { to { transform: translateX(-50%); } }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.75s ease, transform 0.75s ease;
-}
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.on { opacity: 1; transform: translateY(0); }
 
-@media (max-width: 768px) {
-  nav { padding: 24px; }
-  .nav-links { display: none; }
-  #hero { padding: 0 24px; }
-  section { padding: 72px 24px; }
-  #countdown-section { padding: 64px 24px; }
-  .countdown-grid { gap: 0; }
-  .countdown-separator { display: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .marquee-track { animation: none; }
+  [style*="opacity: 0"] { opacity: 1 !important; }
+  .hero-locator, .hero-presenting, .hero-name, .hero-divider, .hero-sub, .hero-cta, .scroll-hint { opacity: 1; transform: none; }
+}
+
+@media (max-width: 840px) {
+  html { font-size: 100%; }
+  nav { padding: 16px 22px; }
+  .nav-right { gap: 16px; }
+  .nav-links { gap: 14px; }
+  .nav-links li.hide-sm { display: none; }
+  #hero { padding: 108px 22px 76px; }
+  section.block { padding: 78px 22px; }
+  #next-up { padding: 70px 22px; }
+  .spotlight { padding: 44px 28px; }
+  .marquee-track span { font-size: 1.25rem; }
   .aims-grid { grid-template-columns: 1fr; }
-  .aim-item { border-right: none; border-bottom: 1px solid var(--line); }
-  .aim-item:last-child { border-bottom: none; }
+  .aim-item { border-right: none; }
   .events-wrap { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: 1fr; }
-  .team-card { border-right: none; border-bottom: 1px solid var(--line); }
+  .team-card { border-right: none; border-bottom: 1px solid var(--line-soft); }
   .team-card:last-child { border-bottom: none; }
   .chair-wrap { flex-direction: column; align-items: flex-start; }
-  footer { flex-direction: column; gap: 12px; }
-  .countdown-cta { flex-direction: column; align-items: center; }
+  footer { flex-direction: column; align-items: flex-start; }
 }
 </style>
 </head>
 <body>
+<div class="grain"></div>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<nav>
-  <a href="#hero" class="nav-logo">Nexus</a>
-  <ul class="nav-links">
-    <li><a href="#aims">About</a></li>
-    <li><a href="#countdown-section">Countdown</a></li>
-    <li><a href="#events">Events</a></li>
-    <li><a href="#team">Team</a></li>
-  </ul>
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Nexus<span class="dot">.</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li class="hide-sm"><a href="#aims">About</a></li>
+      <li class="hide-sm"><a href="#events">Events</a></li>
+      <li class="hide-sm"><a href="#team">Team</a></li>
+      <li><a href="past-events.html" class="nav-cta">Past Events</a></li>
+    </ul>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark and light mode">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+    </button>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section id="hero" style="border-top: none;">
+<section id="hero">
+  <p class="hero-locator">GISMA · Potsdam / Est. 2026</p>
   <p class="hero-presenting">Presenting GISMA's first ever programming and tech society</p>
-  <h1 class="hero-name">Nexus</h1>
+  <h1 class="hero-name">Nexus<span class="dot">.</span></h1>
   <div class="hero-divider"></div>
-  <p class="hero-sub">
-    A place for students who want to build, learn, and figure things out together. Workshops, hackathons, projects and people who actually care about what they're working on.
-  </p>
+  <p class="hero-sub">A place for students who want to build, learn, and figure things out together. Workshops, hackathons, projects and people who actually care about what they're working on.</p>
   <div class="hero-cta">
     <a href="#events" class="btn-primary">See What's On</a>
     <a href="#team" class="btn-ghost">Meet the Team</a>
   </div>
-  <div class="scroll-hint">
-    <div class="scroll-dot"></div>
-    <span>Scroll</span>
-  </div>
+  <div class="scroll-hint"><div class="scroll-dot"></div><span>Scroll</span></div>
 </section>
 
-<!-- COUNTDOWN -->
-<div id="countdown-section">
-  <p class="countdown-eyebrow reveal">First ever Nexus event</p>
-  <h2 class="countdown-title reveal">The Odyssey <span>starts in</span></h2>
-
-  <div class="countdown-grid reveal" id="countdown-grid">
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-days">00</span>
-      <span class="countdown-label">Days</span>
-    </div>
-    <div class="countdown-separator">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-hours">00</span>
-      <span class="countdown-label">Hours</span>
-    </div>
-    <div class="countdown-separator">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-mins">00</span>
-      <span class="countdown-label">Minutes</span>
-    </div>
-    <div class="countdown-separator">:</div>
-    <div class="countdown-unit">
-      <span class="countdown-num" id="cd-secs">00</span>
-      <span class="countdown-label">Seconds</span>
-    </div>
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Build</span><span class="sep">✦</span><span>Learn</span><span class="sep">✦</span><span>Ship</span><span class="sep">✦</span><span>Workshops</span><span class="sep">✦</span><span>Hackathons</span><span class="sep">✦</span><span>Game Jams</span><span class="sep">✦</span><span>Cybersecurity</span><span class="sep">✦</span><span>Web Dev</span><span class="sep">✦</span>
+    <span>Build</span><span class="sep">✦</span><span>Learn</span><span class="sep">✦</span><span>Ship</span><span class="sep">✦</span><span>Workshops</span><span class="sep">✦</span><span>Hackathons</span><span class="sep">✦</span><span>Game Jams</span><span class="sep">✦</span><span>Cybersecurity</span><span class="sep">✦</span><span>Web Dev</span><span class="sep">✦</span>
   </div>
+</div>
 
-  <div class="countdown-cta reveal">
-    <a href="#events" class="btn-ghost">More Information</a>
+<!-- NEXT UP -->
+<div id="next-up">
+  <div class="spotlight reveal">
+    <p class="eyebrow">Next Up</p>
+    <h2 class="spotlight-title">Game Dev Workshop<br>+ Game Jam</h2>
+    <div class="status-chip">Status:&nbsp;<b>Dates to be announced</b></div>
+    <p class="spotlight-body">We're putting together a hands-on game development workshop, followed by a game jam where you get to build something and ship it in a weekend. Dates are still being sorted out. Check back here or keep an eye on our channels and we'll post them as soon as they're locked in.</p>
+    <div class="game-strip">
+      <canvas id="jam-game" aria-hidden="true"></canvas>
+      <p class="game-hint"><b>▲</b> Tap to jump</p>
+    </div>
   </div>
 </div>
 
 <!-- AIMS -->
-<section id="aims">
+<section id="aims" class="block">
   <p class="s-label reveal">What we're about</p>
   <h2 class="s-title reveal">Built for people<br>who wanna build things.</h2>
   <p class="s-body reveal">We started Nexus because we realized the classroom only goes so far. We fill the gap with real projects, real events, and more!</p>
   <div class="aims-grid">
     <div class="aim-item reveal">
-      <p class="aim-num">01</p>
+      <div class="aim-mark"></div>
       <h3 class="aim-title">Connect the right people</h3>
       <p class="aim-desc">Find collaborators, not just classmates. Whether you're building an app, learning a new stack, or just want someone to talk tech with, you'll find them here.</p>
     </div>
     <div class="aim-item reveal">
-      <p class="aim-num">02</p>
+      <div class="aim-mark"></div>
       <h3 class="aim-title">Build things that ship</h3>
       <p class="aim-desc">From hackathons to long-term projects, we create the conditions for real work to happen. Ideas that start here actually go somewhere.</p>
     </div>
     <div class="aim-item reveal">
-      <p class="aim-num">03</p>
+      <div class="aim-mark"></div>
       <h3 class="aim-title">Learn by doing</h3>
       <p class="aim-desc">Hands-on workshops across web dev, cybersecurity, game development and more. No fluff, no slides-only sessions, just skill-building that sticks.</p>
     </div>
     <div class="aim-item reveal">
-      <p class="aim-num">04</p>
+      <div class="aim-mark"></div>
       <h3 class="aim-title">Stay sharp</h3>
       <p class="aim-desc">Tech moves fast. We talk about what's happening in the industry, how to plan your learning, and where things are going. Regular sessions, no gatekeeping.</p>
     </div>
@@ -845,155 +585,183 @@ footer {
 </section>
 
 <!-- EVENTS -->
-<section id="events">
+<section id="events" class="block">
   <p class="s-label reveal">Events</p>
-  <h2 class="s-title reveal">What's happening.</h2>
-  <p class="s-body reveal">Our first hackathon kicks things off. More events are in the works: workshops, networking sessions, and things we haven't announced yet.</p>
+  <h2 class="s-title reveal">What's on.</h2>
+  <p class="s-body reveal">Our first hackathon is done and it went well. Here's where you can catch up on it, and what's coming next.</p>
   <div class="events-wrap">
-    <div class="event-card reveal">
-      <span class="event-pill">Flagship Event</span>
-      <h3 class="event-title">The Odyssey</h3>
-      <p class="event-sub">Our first hackathon. One day. Build something real.</p>
-      <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">11th June 2026</span></div>
-      <div class="meta-row"><span class="meta-key">Time</span><span class="meta-val">1:00 PM — 7:00 PM</span></div>
-      <div class="meta-row"><span class="meta-key">Venue</span><span class="meta-val">GISMA Potsdam Campus, Room 12</span></div>
-      <div class="event-actions">
-        <a href="https://forms.cloud.microsoft/e/9zLCBAkGWH" target="_blank" class="event-btn-primary">Register</a>
-        <a href="https://canva.link/w78yfl09txdcxci" target="_blank" class="event-btn-ghost">Details</a>
-        <a href="https://canva.link/cu2e1ztv8i3qen9" target="_blank" class="event-btn-ghost">FAQs</a>
+    <div class="recap-card reveal">
+      <span class="event-pill">Past · Recap</span>
+      <h3 class="recap-title">The Odyssey</h3>
+      <p class="recap-sub">Our first hackathon. One afternoon, fifteen teams, and a room full of ideas built from scratch.</p>
+      <div class="recap-stats">
+        <div class="recap-stat"><div class="n">15</div><div class="l">Teams</div></div>
+        <div class="recap-stat"><div class="n">6h</div><div class="l">Duration</div></div>
+        <div class="recap-stat"><div class="n">3</div><div class="l">Winners</div></div>
       </div>
+      <a href="past-events.html" class="recap-link">Read the recap →</a>
     </div>
-    <div class="workshops-col reveal">
-      <p class="workshops-label">Upcoming Workshops</p>
-      <div class="ws-item">
-        <span class="ws-name">Game Development</span>
-        <span class="ws-tag">Soon</span>
-      </div>
-      <div class="ws-item">
-        <span class="ws-name">Cybersecurity</span>
-        <span class="ws-tag">Soon</span>
-      </div>
-      <div class="ws-item">
-        <span class="ws-name">Web Development</span>
-        <span class="ws-tag">Soon</span>
-      </div>
+    <div class="horizon reveal">
+      <p class="horizon-label">On the horizon</p>
+      <div class="hz-item"><span class="hz-name">Game Development</span><span class="hz-tag next">Next</span></div>
+      <div class="hz-item"><span class="hz-name">Cybersecurity</span><span class="hz-tag">Soon</span></div>
+      <div class="hz-item"><span class="hz-name">Web Development</span><span class="hz-tag">Soon</span></div>
     </div>
   </div>
 </section>
 
 <!-- TEAM -->
-<section id="team">
+<section id="team" class="block">
   <p class="s-label reveal">The Team</p>
   <h2 class="s-title reveal">The people behind it.</h2>
   <p class="s-body team-intro reveal">Three students and one professor who are super passionate about tech!</p>
 
   <div class="chair-wrap reveal">
-    <div class="chair-photo"><img src="mazhar.jpeg" alt="Mazhar Hameed"></div>
+    <img class="avatar" src="mazhar.jpeg" alt="Mazhar Hameed" data-initials="MH">
     <div class="chair-info">
       <p class="chair-name">Prof. Dr. Mazhar Hameed</p>
       <p class="chair-role">Chair &nbsp;·&nbsp; Faculty Advisor</p>
-      <a href="https://www.linkedin.com/in/mazhar-hameed-02688796/" target="_blank" class="linkedin-btn" style="margin-top: 10px; display: inline-block;">LinkedIn →</a>
+      <a href="https://www.linkedin.com/in/mazhar-hameed-02688796/" target="_blank" rel="noopener" class="linkedin-btn" style="margin-top:12px;">LinkedIn →</a>
     </div>
   </div>
 
   <div class="team-grid">
     <div class="team-card reveal">
-      <div class="team-photo"><img src="prav.jpg" alt="Pravardh Phaniraj"></div>
+      <img class="avatar" src="prav.jpg" alt="Pravardh Phaniraj" data-initials="PP">
       <h3 class="team-name">Pravardh Phaniraj</h3>
       <p class="team-role">Co-Chair</p>
-      <a href="https://www.linkedin.com/in/pravardh/" target="_blank" class="linkedin-btn">LinkedIn →</a>
+      <a href="https://www.linkedin.com/in/pravardh/" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
       <p class="team-bio">Hey! I've been super interested in IT ever since I was 12. I started off with Scratch, got really into video game development, and then slowly pivoted into Cybersecurity. I love solving problems and learning about tech. I have around 5 years of freelancing experience in video game development, and I've been working as a cybersecurity werkstudent at Sopra Steria for the past year :)</p>
     </div>
     <div class="team-card reveal">
-      <div class="team-photo"><img src="alan.jpeg" alt="Alan Yuldashev"></div>
+      <img class="avatar" src="alan.jpeg" alt="Alan Yuldashev" data-initials="AY">
       <h3 class="team-name">Alan Yuldashev</h3>
       <p class="team-role">Co-Chair</p>
-      <a href="https://www.linkedin.com/in/lumberj3ck/" target="_blank" class="linkedin-btn">LinkedIn →</a>
+      <a href="https://www.linkedin.com/in/lumberj3ck/" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
       <p class="team-bio">I'm a software engineer who enjoys building cool stuff. I'm into web development, mostly backend, love TUIs. I enjoy working with passionate, smart people. I've met a lot of great people in Berlin's tech community, and I believe there's so much more to discover. Outside of work, I enjoy sports and a bit of martial arts.</p>
     </div>
     <div class="team-card reveal">
-      <div class="team-photo"><img src="munish.jpeg" alt="Munish Khan"></div>
+      <img class="avatar" src="munish.jpeg" alt="Munish Khan" data-initials="MK">
       <h3 class="team-name">Munish Khan</h3>
       <p class="team-role">Co-Chair</p>
-      <a href="https://www.linkedin.com/in/khanmunish/" target="_blank" class="linkedin-btn">LinkedIn →</a>
-      <p class="team-bio">I'm Munish, a cybersecurity professional currently studying Data Science. I love solving real-world problems through technology and strongly believe that computers can help address many of the world's fundamental challenges. For me, technology is more than just a field of study — it's a tool to create meaningful impact.</p>
+      <a href="https://www.linkedin.com/in/khanmunish/" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
+      <p class="team-bio">I'm Munish, a cybersecurity professional currently studying Data Science. I love solving real-world problems through technology and strongly believe that computers can help address many of the world's fundamental challenges. For me, technology is more than just a field of study. It's a tool for making a real difference.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <p class="footer-logo">Nexus</p>
-  <p class="footer-copy">GISMA University of Applied Sciences &nbsp;·&nbsp; 2026</p>
+  <p class="footer-logo">Nexus<span class="dot">.</span></p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="past-events.html">Past Events</a>
+  </div>
+  <p class="footer-copy">GISMA University of Applied Sciences · Potsdam · 2026</p>
 </footer>
 
 <script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-
-(function loop() {
-  rx += (mx - rx) * 0.1;
-  ry += (my - ry) * 0.1;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(loop);
-})();
-
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.width = '4px'; cursor.style.height = '4px';
-    ring.style.width = '48px'; ring.style.height = '48px';
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.width = '8px'; cursor.style.height = '8px';
-    ring.style.width = '32px'; ring.style.height = '32px';
-  });
-});
-
-// Scroll reveal
-const obs = new IntersectionObserver(entries => {
+const obs = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
-    if (e.isIntersecting) setTimeout(() => e.target.classList.add('on'), i * 70);
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('on'), i * 55); obs.unobserve(e.target); }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
-
+}, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// Countdown — target: June 11 2026, 13:00 CET (UTC+2 in summer)
-const target = new Date('2026-06-11T13:00:00+02:00');
+document.querySelectorAll('img.avatar').forEach(img => {
+  img.addEventListener('error', () => {
+    const span = document.createElement('div');
+    span.className = 'avatar-fallback';
+    span.textContent = img.dataset.initials || '';
+    span.setAttribute('aria-label', img.alt);
+    img.replaceWith(span);
+  });
+});
 
-function pad(n) { return String(n).padStart(2, '0'); }
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+  const root = document.documentElement;
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('nexus-theme', next); } catch(e){}
+});
 
-function tick() {
-  const now = new Date();
-  const diff = target - now;
+/* Tiny pixel runner for the game jam card */
+(function(){
+  const canvas = document.getElementById('jam-game');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (diff <= 0) {
-    document.getElementById('countdown-grid').innerHTML =
-      '<p class="countdown-ended">The Odyssey is live. Good luck.</p>';
-    return;
+  const H = 88, groundY = H - 20;
+  const gravity = 0.7, jumpV = -7.5, speed = 2.2, spawnGap = 150;
+  let W = 0, accent = '#3a34e0', faint = '#9a9aa1';
+  const hero = { x: 34, y: groundY, vy: 0, grounded: true };
+  let obstacles = [], distSince = spawnGap, t = 0, raf = null;
+
+  function readColors(){
+    const cs = getComputedStyle(document.documentElement);
+    accent = (cs.getPropertyValue('--accent') || accent).trim();
+    faint = (cs.getPropertyValue('--faint') || faint).trim();
+  }
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth || 300;
+    canvas.width = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+  }
+  function jump(){ if (hero.grounded){ hero.vy = jumpV; hero.grounded = false; } }
+  function step(){
+    distSince += speed;
+    if (distSince >= spawnGap){ obstacles.push({ x: W + 10, h: Math.random() < 0.4 ? 18 : 12 }); distSince = 0; }
+    for (const o of obstacles){ const dx = o.x - hero.x; if (dx > 0 && dx <= 26 && hero.grounded){ jump(); break; } }
+    hero.vy += gravity; hero.y += hero.vy;
+    if (hero.y >= groundY){ hero.y = groundY; hero.vy = 0; hero.grounded = true; }
+    for (const o of obstacles){ o.x -= speed; }
+    obstacles = obstacles.filter(o => o.x > -20);
+    t++;
+  }
+  function drawHero(x, y){
+    ctx.fillStyle = accent;
+    ctx.fillRect(x, y - 16, 10, 6);      // head
+    ctx.fillRect(x + 1, y - 10, 8, 7);   // body
+    const f = hero.grounded ? Math.floor(t / 6) % 2 : 2;
+    if (f === 0){ ctx.fillRect(x + 1, y - 3, 3, 3); ctx.fillRect(x + 6, y - 3, 3, 3); }
+    else if (f === 1){ ctx.fillRect(x + 2, y - 3, 3, 3); ctx.fillRect(x + 5, y - 3, 3, 3); }
+    else { ctx.fillRect(x, y - 3, 3, 3); ctx.fillRect(x + 7, y - 3, 3, 3); }
+  }
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = faint;
+    for (let x = 0; x < W; x += 8){ ctx.fillRect(x, groundY + 4, 4, 2); }
+    ctx.fillStyle = accent;
+    for (const o of obstacles){ ctx.fillRect(Math.round(o.x), Math.round(groundY - o.h + 4), 8, o.h); }
+    drawHero(Math.round(hero.x), Math.round(hero.y));
+  }
+  function loop(){ step(); draw(); raf = requestAnimationFrame(loop); }
+  function start(){
+    readColors(); resize();
+    if (reduce){ obstacles = [{ x: W * 0.62, h: 12 }]; draw(); return; }
+    cancelAnimationFrame(raf); loop();
   }
 
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  const secs  = Math.floor((diff % 60000) / 1000);
+  window.addEventListener('resize', () => { readColors(); resize(); if (reduce) draw(); });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden){ cancelAnimationFrame(raf); }
+    else if (!reduce){ cancelAnimationFrame(raf); loop(); }
+  });
+  canvas.addEventListener('pointerdown', (e) => { e.preventDefault(); jump(); });
+  themeToggle.addEventListener('click', () => setTimeout(readColors, 20));
 
-  document.getElementById('cd-days').textContent  = pad(days);
-  document.getElementById('cd-hours').textContent = pad(hours);
-  document.getElementById('cd-mins').textContent  = pad(mins);
-  document.getElementById('cd-secs').textContent  = pad(secs);
-}
-
-tick();
-setInterval(tick, 1000);
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start);
+})();
 </script>
 </body>
 </html>

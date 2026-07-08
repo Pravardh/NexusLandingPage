@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Past Events — Nexus</title>
+<link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+<link rel="shortcut icon" href="favicons/favicon.ico">
+<link rel="manifest" href="favicons/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('nexus-theme');
+      if(!t){ t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+      document.documentElement.setAttribute('data-theme', t);
+    } catch(e){ document.documentElement.setAttribute('data-theme','light'); }
+  })();
+</script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --paper: #f1f1ee;
+  --panel: #fbfbf9;
+  --ink: #141417;
+  --muted: #5c5c63;
+  --faint: #9a9aa1;
+  --line: rgba(20,20,23,0.13);
+  --line-soft: rgba(20,20,23,0.07);
+  --accent: #3a34e0;
+  --accent-ink: #ffffff;
+  --grain: 0.04;
+  --r: 16px;
+}
+[data-theme="dark"] {
+  --paper: #0d0d11;
+  --panel: #16161c;
+  --ink: #f1f1ec;
+  --muted: #a2a2aa;
+  --faint: #676770;
+  --line: rgba(255,255,255,0.14);
+  --line-soft: rgba(255,255,255,0.06);
+  --accent: #7d78ff;
+  --accent-ink: #0d0d11;
+  --grain: 0.06;
+}
+
+html { scroll-behavior: smooth; font-size: 106%; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif; font-weight: 400;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+a { color: inherit; }
+
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 44px; display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+}
+nav.scrolled {
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(14px); border-bottom: 1px solid var(--line-soft);
+}
+.nav-logo {
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: 1.4rem; letter-spacing: -0.02em; color: var(--ink); text-decoration: none;
+}
+.nav-logo .dot { color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 26px; }
+.nav-links { display: flex; gap: 26px; list-style: none; align-items: center; }
+.nav-links a {
+  color: var(--muted); text-decoration: none; font-size: 0.74rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  color: var(--accent) !important; border: 1px solid var(--accent);
+  padding: 9px 17px; border-radius: 100px;
+}
+.theme-toggle {
+  width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line);
+  background: transparent; color: var(--ink); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle .i-moon { display: block; }
+.theme-toggle .i-sun { display: none; }
+[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+
+/* PAGE HEAD */
+.page-head { padding: 158px 44px 56px; max-width: 1100px; margin: 0 auto; }
+.crumb { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 26px; }
+.crumb a { color: var(--muted); text-decoration: none; }
+.crumb a:hover { color: var(--ink); }
+.page-title {
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: clamp(3.4rem, 11vw, 7.5rem); letter-spacing: -0.045em; line-height: 0.88;
+  color: var(--ink); margin-bottom: 24px;
+}
+.page-title .dot { color: var(--accent); }
+.page-intro { font-size: 1.06rem; line-height: 1.8; color: var(--muted); max-width: 528px; }
+
+/* RECORD */
+.record { max-width: 1100px; margin: 0 auto; padding: 0 44px 40px; }
+.record-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; transition: background-color 0.4s ease, border-color 0.4s ease; }
+.record-top { padding: 46px 48px; border-bottom: 1px solid var(--line-soft); }
+.record-pill {
+  display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 100px; padding: 6px 12px; margin-bottom: 22px;
+}
+.record-title {
+  font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700;
+  font-size: clamp(3rem, 8vw, 5.6rem); letter-spacing: -0.04em; line-height: 0.9;
+  color: var(--ink); margin-bottom: 10px;
+}
+.record-sub { font-style: italic; font-size: 1.06rem; color: var(--muted); }
+.meta-strip { display: grid; grid-template-columns: repeat(4, 1fr); }
+.meta-cell { padding: 26px 30px; border-right: 1px solid var(--line-soft); }
+.meta-cell:last-child { border-right: none; }
+.meta-k { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-bottom: 9px; }
+.meta-v { font-size: 0.98rem; color: var(--ink); font-weight: 500; }
+
+/* SECTION */
+.section { max-width: 1100px; margin: 0 auto; padding: 58px 44px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 24px;
+}
+.eyebrow::before { content: ''; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+.narrative { font-size: 1.14rem; line-height: 1.9; color: var(--ink); max-width: 730px; }
+.stat-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
+  margin-top: 46px; background: var(--panel); transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+.stat { padding: 42px 32px; border-right: 1px solid var(--line-soft); text-align: center; }
+.stat:last-child { border-right: none; }
+.stat .num { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(3rem, 7vw, 4.6rem); line-height: 1; letter-spacing: -0.03em; color: var(--ink); }
+.stat .cap { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin-top: 13px; }
+
+/* WINNERS */
+.winners-intro { font-size: 1.06rem; line-height: 1.8; color: var(--muted); max-width: 620px; margin-bottom: 40px; }
+.winner {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 42px 46px; margin-bottom: 16px;
+  display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: start;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+.winner.top { border-color: var(--accent); }
+.rank { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.winner.top .rank { color: var(--accent); }
+.rank .place {
+  display: block; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800;
+  font-size: 2.8rem; letter-spacing: -0.03em; color: var(--ink); margin-top: 6px;
+}
+.winner.top .rank .place { color: var(--accent); }
+.team-name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 2.3rem; letter-spacing: -0.03em; color: var(--ink); line-height: 1; margin-bottom: 8px; }
+.team-members { font-family: 'Space Mono', monospace; font-size: 0.74rem; color: var(--muted); margin-bottom: 18px; }
+.team-members.pending { color: var(--faint); }
+.project { font-size: 1.02rem; line-height: 1.8; color: var(--muted); }
+.project b { color: var(--ink); font-weight: 600; }
+
+/* GALLERY */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 6px; }
+.shot {
+  aspect-ratio: 4 / 3; border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--panel); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px; color: var(--faint);
+  overflow: hidden; transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+.shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shot .dot { width: 28px; height: 28px; border: 1px solid var(--line); border-radius: 50%; position: relative; }
+.shot .dot::after { content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; transform: translate(-50%, -50%); }
+.shot .cap { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.gallery-note { font-family: 'Space Mono', monospace; font-size: 0.66rem; color: var(--faint); margin-top: 18px; }
+
+/* LESSONS */
+.lessons { max-width: 780px; }
+.lesson { display: grid; grid-template-columns: 30px 1fr; gap: 20px; padding: 26px 0; border-bottom: 1px solid var(--line-soft); align-items: start; }
+.lesson:last-child { border-bottom: none; }
+.lesson .arrow { color: var(--accent); font-size: 1.3rem; line-height: 1.5; font-weight: 700; }
+.lesson p { font-size: 1.04rem; line-height: 1.8; color: var(--muted); }
+.lessons-outro { font-size: 1.04rem; line-height: 1.8; color: var(--ink); margin-top: 38px; max-width: 620px; }
+
+/* BACK */
+.back-cta { max-width: 1100px; margin: 0 auto; padding: 22px 44px 92px; }
+.back-link {
+  display: inline-block; padding: 15px 32px; border: 1px solid var(--line); border-radius: 100px;
+  color: var(--muted); font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.back-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* FOOTER */
+footer { padding: 54px 44px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.footer-logo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--ink); }
+.footer-logo .dot { color: var(--accent); }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--ink); }
+.footer-copy { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--faint); }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.on { opacity: 1; transform: translateY(0); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+@media (max-width: 840px) {
+  html { font-size: 100%; }
+  nav { padding: 16px 22px; }
+  .nav-right { gap: 16px; }
+  .nav-links { gap: 14px; }
+  .nav-links li.hide-sm { display: none; }
+  .page-head { padding: 128px 22px 40px; }
+  .record, .section, .back-cta { padding-left: 22px; padding-right: 22px; }
+  .record-top { padding: 34px 26px; }
+  .meta-strip { grid-template-columns: repeat(2, 1fr); }
+  .meta-cell { border-bottom: 1px solid var(--line-soft); }
+  .meta-cell:nth-child(2n) { border-right: none; }
+  .meta-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .stat-strip { grid-template-columns: 1fr; }
+  .stat { border-right: none; border-bottom: 1px solid var(--line-soft); }
+  .stat:last-child { border-bottom: none; }
+  .winner { grid-template-columns: 1fr; gap: 16px; padding: 32px 26px; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  footer { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Nexus<span class="dot">.</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li class="hide-sm"><a href="index.html#aims">About</a></li>
+      <li class="hide-sm"><a href="index.html#events">Events</a></li>
+      <li class="hide-sm"><a href="index.html#team">Team</a></li>
+      <li><a href="past-events.html" class="nav-cta">Past Events</a></li>
+    </ul>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark and light mode">
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE HEAD -->
+<header class="page-head">
+  <p class="crumb"><a href="index.html">Nexus</a> / Past Events</p>
+  <h1 class="page-title">Past Events<span class="dot">.</span></h1>
+  <p class="page-intro">A record of what we've run so far. How it went, who came out on top, and what we're taking into the next one.</p>
+</header>
+
+<!-- THE ODYSSEY RECORD -->
+<div class="record">
+  <div class="record-card">
+    <div class="record-top">
+      <span class="record-pill">Flagship · Hackathon</span>
+      <h2 class="record-title">The Odyssey</h2>
+      <p class="record-sub">Our first hackathon.</p>
+    </div>
+    <div class="meta-strip">
+      <div class="meta-cell"><p class="meta-k">Date</p><p class="meta-v">11 June 2026</p></div>
+      <div class="meta-cell"><p class="meta-k">Duration</p><p class="meta-v">About 6 hours</p></div>
+      <div class="meta-cell"><p class="meta-k">Teams</p><p class="meta-v">15</p></div>
+      <div class="meta-cell"><p class="meta-k">Venue</p><p class="meta-v">GISMA Potsdam, Room 12</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WENT -->
+<section class="section">
+  <p class="eyebrow reveal">How it went</p>
+  <p class="narrative reveal">The Odyssey was our first proper event. It ran for about six hours, with roughly fifteen teams building something from scratch in a single afternoon. We kept everyone going with pizza and drinks, and by the end every team got up to present what they'd made. The ideas were sharper and more varied than we expected for a first event. Plenty of people walked in not knowing anyone and left having built a working demo with a team they'd only just met. For a first attempt, we were really happy with how it came together.</p>
+  <div class="stat-strip reveal">
+    <div class="stat"><div class="num">15</div><div class="cap">Teams</div></div>
+    <div class="stat"><div class="num">6h</div><div class="cap">Start to finish</div></div>
+    <div class="stat"><div class="num">3</div><div class="cap">Winning teams</div></div>
+  </div>
+</section>
+
+<!-- WINNERS -->
+<section class="section">
+  <p class="eyebrow reveal">Winners</p>
+  <p class="winners-intro reveal">Fifteen teams presented. These three came out on top.</p>
+
+  <div class="winner top reveal">
+    <div class="rank">Winner<span class="place">01</span></div>
+    <div>
+      <h3 class="team-name">The Hallucinations</h3>
+      <p class="team-members pending">Team members to be added</p>
+      <p class="project"><b>Bureaucracy, made survivable.</b> An app that helps students who are new to Germany get through the paperwork and appointments that come with settling in.</p>
+    </div>
+  </div>
+
+  <div class="winner reveal">
+    <div class="rank">1st Runner-Up<span class="place">02</span></div>
+    <div>
+      <h3 class="team-name">Team 201</h3>
+      <p class="team-members">Yaroslav Silyakov · Shibin Babu · Abdullah Mohammad Aref</p>
+      <p class="project"><b>Smarter grocery runs.</b> A shopping app that automatically adds the ingredients for whatever dish you want to make, and suggests alternatives when something isn't available.</p>
+    </div>
+  </div>
+
+  <div class="winner reveal">
+    <div class="rank">2nd Runner-Up<span class="place">03</span></div>
+    <div>
+      <h3 class="team-name">404 New Era</h3>
+      <p class="team-members">Subin Bae · Ashish Negi · Harsh Deshmukh</p>
+      <p class="project"><b>Less time on screens.</b> A concept for AR glasses built to help people cut down their screen time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section">
+  <p class="eyebrow reveal">On the day</p>
+  <div class="gallery reveal">
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 01</span></div>
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 02</span></div>
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 03</span></div>
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 04</span></div>
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 05</span></div>
+    <div class="shot"><div class="dot"></div><span class="cap">Photo 06</span></div>
+  </div>
+  <p class="gallery-note">Photos coming soon. Drop images into the repo and swap each placeholder for &lt;img src="odyssey-01.jpg"&gt;.</p>
+</section>
+
+<!-- LESSONS -->
+<section class="section">
+  <p class="eyebrow reveal">What we learned</p>
+  <div class="lessons reveal">
+    <div class="lesson"><span class="arrow">→</span><p>Six hours was about the right length. Most teams used nearly the full window, and nobody felt rushed or ran out of things to do.</p></div>
+    <div class="lesson"><span class="arrow">→</span><p>Pizza and drinks kept the energy up. Next time we'll get the food in a little earlier to smooth over the mid-afternoon dip.</p></div>
+    <div class="lesson"><span class="arrow">→</span><p>Fifteen demos back to back is a lot to sit through. We'll give each team a tighter, clearer slot so the presentations stay sharp.</p></div>
+    <div class="lesson"><span class="arrow">→</span><p>The best part was watching people who had never met team up and actually ship something. That's what we want more of, so we'll help people find teammates earlier next time.</p></div>
+  </div>
+  <p class="lessons-outro reveal">If you were there, thanks for making it what it was. If you missed it, the next one is already in the works.</p>
+</section>
+
+<div class="back-cta">
+  <a href="index.html" class="back-link">← Back to home</a>
+</div>
+
+<footer>
+  <p class="footer-logo">Nexus<span class="dot">.</span></p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="past-events.html">Past Events</a>
+  </div>
+  <p class="footer-copy">GISMA University of Applied Sciences · Potsdam · 2026</p>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('on'), i * 55); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const root = document.documentElement;
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('nexus-theme', next); } catch(e){}
+});
+</script>
+</body>
+</html>
