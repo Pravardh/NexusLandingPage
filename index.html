@@ -412,19 +412,56 @@ section.block { padding: 112px 44px; border-top: 1px solid var(--line-soft); tex
 }
 .chair-role { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
 .team-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  border: 1px solid var(--line); border-radius: var(--r); overflow: hidden;
-  max-width: 940px; margin: 0 auto; text-align: left; background: var(--panel);
-  transition: background-color 0.4s ease, border-color 0.4s ease;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+
+  max-width: 940px;
+  margin: 0 auto;
+
+  text-align: left;
+
+  background: var(--line-soft);
+  gap: 1px;
+
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease;
 }
+
 .team-card {
-  padding: 42px 36px; border-right: 1px solid var(--line-soft);
-  transition: background 0.3s; display: flex; flex-direction: column;
+  grid-column: span 2;
+
+  padding: 42px 36px;
+
+  background: var(--panel);
+
+  transition: background 0.3s;
+
+  display: flex;
+  flex-direction: column;
 }
-.team-card:last-child { border-right: none; }
-.team-card:hover { background: color-mix(in srgb, var(--accent) 5%, var(--panel)); }
-.team-card .avatar, .team-card .avatar-fallback { width: 70px; height: 70px; margin-bottom: 24px; }
-.team-card .avatar-fallback { font-size: 1.6rem; }
+
+/* Center the second row */
+.team-card:nth-child(4) {
+  grid-column: 1 / span 3;
+}
+
+.team-card:nth-child(5) {
+  grid-column: 4 / span 3;
+}
+
+.team-card:hover {
+  background: color-mix(
+    in srgb,
+    var(--accent) 5%,
+    var(--panel)
+  );
+}
+
 .team-name {
   font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600;
   font-size: 1.2rem; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 4px;
@@ -497,6 +534,18 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .team-card:last-child { border-bottom: none; }
   .chair-wrap { flex-direction: column; align-items: flex-start; }
   footer { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 840px) {
+
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-card,
+  .team-card:nth-child(4),
+  .team-card:nth-child(5) {
+    grid-column: auto;
+  }
 }
 </style>
 </head>
@@ -646,6 +695,20 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
       <p class="team-role">Co-Chair</p>
       <a href="https://www.linkedin.com/in/khanmunish/" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
       <p class="team-bio">I'm Munish, a cybersecurity professional currently studying Data Science. I love solving real-world problems through technology and strongly believe that computers can help address many of the world's fundamental challenges. For me, technology is more than just a field of study. It's a tool for making a real difference.</p>
+    </div>
+    <div class="team-card reveal">
+      <img class="avatar" src="tushar.jpeg" alt="Tushar Bhardwaj" data-initials="MK">
+      <h3 class="team-name">Tushar Bhardwaj</h3>
+      <p class="team-role">Co-Chair</p>
+      <a href="https://www.linkedin.com/in/tusharrbhardwaj/" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
+      <p class="team-bio">I’m a software engineering student who likes turning ideas into working projects. From web apps and automation to IoT and cybersecurity. I enjoy experimenting with Python, JavaScript, C++ and whatever technology helps me build something interesting. When I’m not coding, you’ll probably find me behind a camera; photography is another space where I get to mix creativity, curiosity and storytelling.</p>
+    </div>
+    <div class="team-card reveal">
+      <img class="avatar" src="sargun.png" alt="Sargunjot Kaur" data-initials="MK">
+      <h3 class="team-name">Sargunjot Kaur</h3>
+      <p class="team-role">Co-Chair</p>
+      <a href="linkedin.com/in/sargunjot-kaur-4b6a06172" target="_blank" rel="noopener" class="linkedin-btn">LinkedIn →</a>
+      <p class="team-bio">I’m an engineering student who’s passionate about technology, innovation, and intellectual property, and I love exploring how creative ideas can be transformed into something real. I’m also deeply drawn to art and creativity, which adds a more imaginative side to the way I think and work. I enjoy learning through projects, collaborating with others, and discovering new ways to combine creativity with technology. For me, innovation is at its best when logic and creativity come together.</p>
     </div>
   </div>
 </section>
